@@ -10,7 +10,6 @@ paragrafos = div_conteudo.find_all("p")
 
 texto = "\n".join((p.get_text(strip=True)) for p in paragrafos)
 
-with open("texto.txt", "w") as f:
-    f.write(texto)
+
 
 
