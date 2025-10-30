@@ -6,11 +6,13 @@ url_info = "https://centralnovel.com/series/shadow-slave-20230928/"
 url_cap = "https://centralnovel.com/shadow-slave-capitulo-1/"
 
 
+
+
 def getText(soup):
     div_conteudo = soup.find("div", class_="epcontent entry-content")
     paragrafos = div_conteudo.find_all("p")
     texto = "\n".join((p.get_text(strip=True)) for p in paragrafos)
-    return texto
+    return div_conteudo
 
 def getTitle(soup):
     title = soup.find("h1", class_="entry-title")
@@ -23,6 +25,10 @@ def getAuthor(soup):
     author_name = author.find("a").text
     return author_name
 
+def getImage(soup):
+    img = soup.find("img", class_="ts-post-image wp-post-image attachment-post-thumbnail size-post-thumbnail")
+    return img['src']
+
 
 def getNovelInfo(url):
     response = requests.get(url)
@@ -30,13 +36,23 @@ def getNovelInfo(url):
     info = {}
     info["title"] = getTitle(soup)
     info["author"] = getAuthor(soup)
+    info['image'] = getImage(soup)
 
     return info
 
-def buildEpub(content):
-    novel_content = getContent(url_info)
-    print(content["text"])
-    #book = epub.EpubBook()
+
+
+def buildEpub(url):
+    novel_info = getNovelInfo(url)
+    print(info)
+    
+
+buildEpub(url_info)
+
+
+
+
+#book = epub.EpubBook()
     #book.set_title("Livro teste")
     #book.set_language('pt')
     #book.add_author("Alfredo Lucas")
@@ -55,8 +71,6 @@ def buildEpub(content):
     #book.add_item(epub.EpubNav())
 #
     #epub.write_epub('teste.epub', book, {})
-
-buildEpub(getContent(url))
 
 
 
